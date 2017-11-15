@@ -1,4 +1,6 @@
 % pref(Student1, Student2, Preference) - High preference is better.
+% Read "Student1 ranks Student2 with preference Preference,
+%       where higher Preference is better."
 pref(1,6,1).
 pref(1,5,2).
 pref(1,4,3).
