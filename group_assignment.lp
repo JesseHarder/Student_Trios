@@ -38,4 +38,4 @@ score_sum(PersonA, Score) :-
 % #maximize { Score,A,B : peer(A,B),pref(A,B,Score) }.
 
 #show in/2.
-#show least_pref/2.
+% #show least_pref/2.
