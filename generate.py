@@ -1,12 +1,31 @@
 import sys
 import csv
 
-output_filename = "preferences/results.lp"
+
+def generate(input_filename, output_filename="preferences/results.lp"):
+    # Open file and read input.
+    rows = []
+    with open(input_filename, 'rb') as csv_file:
+        file_reader = csv.reader(csv_file)
+        strings = []
+        for row in file_reader:
+            rows.append(row)
+
+    # Reformat input for easy use.
+    people = rows[0][1:len(rows[0])]
+    preferences = {}
+    for row in rows[1:len(rows[0])]:
+        name = row[0]
+        prefs = row[1:len(row)]
+        preferences[name] = prefs
+
+    # Write result to lp file.
+    write_preference_file(output_filename, people, preferences)
 
 
-# Function for generating the output file.
+# Function for creating and writing to the output file.
 # Uses globals output_filename, people, and preferences
-def generate_preference_file(out_filename, students, student_preferences):
+def write_preference_file(out_filename, students, student_preferences):
     with open(out_filename, "w+") as out_file:
         # Print Header comment.
         out_file.write('% pref(Student1, Student2, Preference) - High preference is better.\n')
@@ -32,41 +51,27 @@ def generate_preference_file(out_filename, students, student_preferences):
                 out_file.write('pref("%s", "%s", %s).\n' % (ranking_student, ranked_student, pref))
             out_file.write("\n")
         # Print Veto Facts
-        for veto in vetos:
-            out_file.write('vetos("%s", "%s").\n' % (veto['vetoer'], veto['vetoee']))
+        if len(vetos) > 0:
+            out_file.write('% Vetos(Student1, Student2) below read as '
+                           '"Student1 refuses to be grouped with Student2"\n')
+            for veto in vetos:
+                out_file.write('vetos("%s", "%s").\n' % (veto['vetoer'], veto['vetoee']))
 
 
-
-# Main code.
+# Main code for running just this file.
 if __name__ == "__main__":
     # Get input file name.
     if len(sys.argv) == 1:
         print("ERROR: Please give input file name as commandline argument.")
 
-    input_filename = sys.argv[1]
-
-    # Open file and read input.
-    rows = []
-    with open(input_filename, 'rb') as csv_file:
-        file_reader = csv.reader(csv_file)
-        strings = []
-        for row in file_reader:
-            rows.append(row)
-
-    # Reformat input for easy use.
-    people = rows[0][1:len(rows[0])]
-    preferences = {}
-    for row in rows[1:len(rows[0])]:
-        name = row[0]
-        prefs = row[1:len(row)]
-        preferences[name] = prefs
+    in_filename = sys.argv[1]
 
     # Accept output filename as command line argument.
     if len(sys.argv) >= 3:
-        output_filename = sys.argv[2]
+        generate(in_filename, sys.argv[2])
+    else:
+        generate(in_filename)
 
-    # Write result to lp file.
-    generate_preference_file(output_filename, people, preferences)
 
 
 
