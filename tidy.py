@@ -10,8 +10,8 @@ if __name__ == "__main__":
         in_filename = 'ASP_results/results.txt'
 
     # Accept output filename as command line argument.
-    if len(sys.argv) >= 3:
-        output_filename = sys.argv[2]
+    # if len(sys.argv) >= 3:
+    #     output_filename = sys.argv[2]
 
     groups = {}
     ins = []
@@ -21,7 +21,6 @@ if __name__ == "__main__":
             if re.match('Answer', line):
                 ins = []
                 groups = {}
-                print("Yay.")
                 continue
 
             if re.match('in(.*)', line):
@@ -41,4 +40,8 @@ if __name__ == "__main__":
                     groups[group_num].append(student)
 
     # We should now have the groups.
-    print(groups)
+    for (group_num, groups_members) in groups.items():
+        print("Group %s" % group_num)
+        for member in groups_members:
+            print(member)
+        print("")
