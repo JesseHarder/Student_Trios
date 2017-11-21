@@ -1,5 +1,5 @@
 % People are anyone who prefers or has been prefered by someone.
-person(FirestPerson) :- pref(FirestPerson,FirestPerson,Score).
+person(FirstPerson) :- pref(FirstPerson,SecondPerson,Score).
 person(SecondPerson) :- pref(FirestPerson,SecondPerson,Score).
 
 % There is one group for every three people.
@@ -9,7 +9,7 @@ group(1..N/group_size) :- N = #count{P:person(P)}.
 % Each person is in exactly 1 group.
 1 {in(Person,Group) : group(Group)} 1 :- person(Person).
 
-% Each group has exactly three people in it.
+% Each group has exactly 3 people in it.
 3 {in(Person,Group) : person(Person)} 3 :- group(Group).
 
 % Person A can't be paired with person B if they veto them.
